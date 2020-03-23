@@ -1,0 +1,19 @@
+{
+  "name": "senate-financial-disclosures",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "CC-BY-SA",
+  "dependencies": {
+    "images-downloader": "^1.0.3",
+    "merge-img": "^2.1.3",
+    "mkdirp": "^1.0.3",
+    "p-queue": "^6.3.0",
+    "puppeteer": "^2.1.1"
+  }
+}
