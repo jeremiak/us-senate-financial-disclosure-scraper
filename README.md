@@ -8,11 +8,15 @@ Many of the documents are submitted electronically and therefore rendered as nic
 
 The workflow is broken out into steps that are dependent on previous steps but can be run independently. This helps breaks the entire process down into chunks so its easier to restart if something gets corrupted or goes wrong.
 
+You'll need to have `imagemagick` installed, otherwise everything is a node dependency.
+
 Assuming you've run the following:
 
-`$ nvm use`
-
-`$ npm install`
+```
+$ brew install imagemagick # on mac
+$ nvm use
+$ npm install
+```
 
 Then you can run each step of the workflow as a Node script:
 
@@ -26,9 +30,7 @@ Uses the report search interface to get the URLs for all reports made by current
 
 ### Step 2 - Download reports
 
-Uses the `data/reports.json` file generated in step 1 to download a copy of all of the reports. Some reports are HTML files and some are scanned PDFs.
-
-**This step downloads each page of the PDF as an image but doesn't yet collapse them all into one file.**
+Uses the `data/reports.json` file generated in step 1 to download a copy of all of the reports. Some reports are HTML files and some are scanned PDFs. We download a copy so that we don't have to repeatedly hit the Senate's servers.
 
 ### Step 3 - Parse reports **(TODO)**
 

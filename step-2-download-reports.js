@@ -1,12 +1,12 @@
 const fs = require('fs').promises
 
 const downloadImages = require('images-downloader').images
-const mergeImages = require('merge-img')
 const mkdirp = require('mkdirp')
 const puppeteer = require('puppeteer')
 const { default: Queue } = require('p-queue')
 
-const sleep = require('./sleep')
+const exec = require('./lib/exec')
+const sleep = require('./lib/sleep')
 
 const reports = require('./data/reports.json')
 
@@ -67,19 +67,11 @@ async function downloadPdfPageImages(page, dirPath) {
     downloadedImage => downloadedImage.filename
   )
 
-  // TODO: Actually combine all the images into a PDF
-  await fs.writeFile(`${dirPath}/manifest.json`, JSON.stringify(imagePaths, null, 2))
-  
-  // This code didn't work for that because of GIF support
+  const fileArgs = imagePaths.join(" ")
+  const outFile = `${dirPath}.pdf`
+  const cmd = `convert ${fileArgs} +compress -quality 100 ${outFile}`
 
-  // try {
-  //   const image = await mergeImages(imagePaths)
-  //   // await image.write(`${dirPath}.gif`)
-  // } catch (e) {
-  //   console.log({ dirPath, pdfUrls, imagePaths })
-  //   debugger
-  // }
-
+  await exec(cmd)
 
   return
 }
@@ -102,12 +94,9 @@ async function downloadReports() {
       const downloadReportPath = `./data/reports/${id}.${type}`
       const downloadReportDirPath = `./data/reports/${id}`
 
-      const pathToCheckForExistence =
-        type === "html" ? downloadReportPath : downloadReportDirPath
-
       try {
-        await fs.access(pathToCheckForExistence)
-        console.log(`Seems like ${pathToCheckForExistence} exists, skipping`)
+        await fs.access(downloadReportPath)
+        console.log(`Seems like ${downloadReportPath} exists, skipping`)
       } catch (e) {
         console.log(`Downloading report (${id})`)
         const reportPage = await browser.newPage()
