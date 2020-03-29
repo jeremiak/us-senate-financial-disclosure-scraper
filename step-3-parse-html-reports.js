@@ -49,7 +49,11 @@ function extractTables(html) {
           .find("td")
           .toArray()
           .forEach((td, i) => {
-            row[tableColumns[i]] = $(td)
+            const column = tableColumns[i]
+
+            if ([''].includes(column)) return
+
+            row[column] = $(td)
               .text()
               .trim()
           })
@@ -98,7 +102,7 @@ glob('./data/reports/*.html', (err, files) => {
     console.error(err)
     return
   }
-  const queue = new Queue({ concurrency: 1 })
+  const queue = new Queue({ concurrency: 2 })
 
   files.forEach(file => {
     queue.add(() => {

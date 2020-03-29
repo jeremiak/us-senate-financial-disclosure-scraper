@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "all": "node step-1-get-report-urls.js && node step-2-download-reports.js && node step-3-parse-html-reports.js && node step-4-pdfs.js",
+    "dev": "nodemon server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -12,10 +13,17 @@
   "license": "CC-BY-SA",
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
+    "d3-dsv": "^1.2.0",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
     "glob": "^7.1.6",
     "images-downloader": "^1.0.3",
+    "lodash.kebabcase": "^4.1.1",
     "mkdirp": "^1.0.3",
     "p-queue": "^6.3.0",
     "puppeteer": "^2.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
   }
 }

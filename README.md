@@ -34,8 +34,22 @@ Uses the `data/reports.json` file generated in step 1 to download a copy of all 
 
 ### Step 3 - Parse HTML reports
 
-Extract data from all `.html` files and create a `.json` file.
+Extract data from all `.html` files and create a `.json` file for each.
 
 ### Step 4 - PDFs
 
-_Still to implement._
+_Still to implement. Some sort of system that allows for a human to easily read a PDF and manually extract the structured data out of it._
+
+### Step 5 - Create CSVs
+
+* `transactions.csv` - all of the transactions from the filings
+
+_To do_:
+
+* `honoraria.csv`
+* `earned.csv`
+* `assets.csv`
+* `gifts.csv`
+* `travel.csv`
+* `liabilities.csv`
+* `positions.csv`
