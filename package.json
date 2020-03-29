@@ -4,12 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "all": "node step-1-get-report-urls.js && node step-2-download-reports.js && node step-3-parse-html-reports.js && node step-4-pdfs.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "CC-BY-SA",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "glob": "^7.1.6",
     "images-downloader": "^1.0.3",
     "mkdirp": "^1.0.3",
     "p-queue": "^6.3.0",

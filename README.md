@@ -32,6 +32,10 @@ Uses the report search interface to get the URLs for all reports made by current
 
 Uses the `data/reports.json` file generated in step 1 to download a copy of all of the reports. Some reports are HTML files and some are scanned PDFs. We download a copy so that we don't have to repeatedly hit the Senate's servers.
 
-### Step 3 - Parse reports **(TODO)**
+### Step 3 - Parse HTML reports
 
-This would read through the HTML reports and extract data from them. And somehow OCR the PDF reports and make the data available for human review.
+Extract data from all `.html` files and create a `.json` file.
+
+### Step 4 - PDFs
+
+_Still to implement._

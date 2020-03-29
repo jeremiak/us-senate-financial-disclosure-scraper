@@ -23,7 +23,7 @@ async function agreeWithStatement(page) {
   return
 }
 
-const reportIdRegex = /([\d\w\-]+)\/$/
+const reportIdRegex = /([\d\w\-]+)\/+$/
 function determineReportTypeAndId(reportUrl) {
   const match = reportUrl.match(reportIdRegex)
   const id = match ? match[1] : 'UNCAPTURED'
@@ -111,7 +111,7 @@ async function downloadReports() {
         await reportPage.close()
       }
 
-      const randomSleepDuration = Math.random() * 1000
+      const randomSleepDuration = Math.random() * 500
       await sleep(randomSleepDuration)
 
       return
