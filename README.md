@@ -20,9 +20,12 @@ $ npm install
 
 Then you can run each step of the workflow as a Node script:
 
-`$ node step-1-get-report-urls.js`
+1. `$ node step-1-get-report-urls.js`
+1. `$ node step-2-download-reports.js`
+1. `$ node step-3-parse-html-reports.js`
+1. `$ node step-4-pdfs.js` - This does nothing really, still have to figure this part out
+1. `$ node step-5-combine-to-csv.js`
 
-`$ node step-2-download-reports.js`
 
 ### Step 1 - Get report URLs
 
@@ -36,15 +39,27 @@ Uses the `data/reports.json` file generated in step 1 to download a copy of all 
 
 Extract data from all `.html` files and create a `.json` file for each.
 
-### Step 4 - PDFs
+### Step 4 - Manually review PDFs
 
 _Still to implement. Some sort of system that allows for a human to easily read a PDF and manually extract the structured data out of it._
+
+This tool pulls up all of the PDF files and allows us to read them and build up the data in JSON. This is a pretty manual process and is based on the current contents of the file system.
+
+If you have some PDFs that you need to annotate with a JSON file, do the following:
+
+1. `cd step-4-pdf-review`
+1. `node index.js`
+1. Application runs at [http://localhost:3000](http://localhost:3000)
+
+When you're done, make sure to remember to `cd ..` since you're not in the project root.
 
 ### Step 5 - Create CSVs
 
 * `transactions.csv` - all of the transactions from the filings
 
 _To do_:
+
+I think the best thing would be to make a CSV per major section in each annual report (it seems like beyond amendments the only thing that's reported regularly is new transactions). I imagine that the CSVs might be named something like:
 
 * `honoraria.csv`
 * `earned.csv`

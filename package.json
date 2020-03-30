@@ -26,7 +26,8 @@
     "p-queue": "^6.3.0",
     "puppeteer": "^2.1.1",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "sass": "^1.26.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

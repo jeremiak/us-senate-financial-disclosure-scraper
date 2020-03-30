@@ -6,40 +6,44 @@ const Page = ({ reports }) => {
     <div>
       <h1>PDF Senate financial disclosure reports</h1>
 
-      <style jsx>{`
-        table {
-          width: 80%;
-        }
-      `}</style>
-
       <table>
         <thead>
           <tr>
             <th>#</th>
             <th>Report ID</th>
+            <th>Report title</th>
             <th>PDF</th>
-            <th>HTML</th>
             <th>JSON</th>
           </tr>
         </thead>
+        <tbody>
+          {reports.map((report, i) => {
+            const { metadata, reportId, pdf, json } = report
+            return (
+              <tr key={reportId}>
+                <td>{i + 1}</td>
+                <td>
+                  <a href={`/report/${reportId}`}>{reportId}</a>
+                </td>
+                <td>
+                  {metadata && (
+                    <>
+                      <p>
+                        <span>{metadata.firstName} {metadata.lastName}</span>
+                      </p>
+                      <p>
+                        <em>{metadata.reportTitle}</em>
+                      </p>
+                    </>
+                  )}
+                </td>
+                <td>{pdf ? "Yes" : "No"}</td>
+                <td>{json ? "Yes" : "No"}</td>
+              </tr>
+            )
+          })}
+        </tbody>
       </table>
-      <tbody>
-        {reports.map((report, i) => {
-          return (
-            <tr key={report.reportId}>
-              <td>{i + 1}</td>
-              <td>
-                <a href={`/reports/${report.reportId}`}>
-                  {report.reportId}
-                </a>
-              </td>
-              <td>{report.pdf || "No"}</td>
-              <td>{report.html || "No"}</td>
-              <td>{report.json || "No"}</td>
-            </tr>
-          )
-        })}
-      </tbody>
     </div>
   )
 }

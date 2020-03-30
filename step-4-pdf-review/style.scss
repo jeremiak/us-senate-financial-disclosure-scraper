@@ -1,0 +1,141 @@
+* {
+  box-sizing: border-box;
+}
+
+main {
+  font-family: sans-serif;
+  margin: 0 auto;
+  width: 95%;
+
+  @media screen and (min-width: 600px) {
+    width: 80%;
+  }
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+th {
+  text-align: left;
+}
+
+tbody td {
+  padding-top: .3rem;
+  padding-bottom: .3rem;
+}
+
+th:first-child,
+td:first-child {
+  padding-left: .4rem;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #ebebeb;
+}
+
+.report-annotator-container {
+  position: relative;
+  overflow-x: hidden;
+}
+
+.report-container,
+.report-container embed {
+  width: 100%;
+}
+
+$annotatorWidth: 300px;
+
+.annotator-container {
+  position: absolute;
+  top: 45px;
+  right: 0;
+
+  button {
+    display: block;
+  }
+}
+
+.annotator {
+  background-color: white;
+  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+  display: block;
+  height: 70vh;
+  padding: 1rem;
+  overflow-y: scroll;
+  width: $annotatorWidth;
+}
+
+#annotator-close-toggle {
+  position: absolute;
+  left: -9999px;
+}
+
+#annotator-close-toggle ~ label {
+  align-items: center;
+  background-color: gold;
+  display: flex;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}
+
+#annotator-close-toggle ~ label,
+#annotator-close-toggle ~ div {
+  transition: transform .7s ease-in;
+  transform: translate(0, 0);
+}
+
+#annotator-close-toggle:checked ~ label {
+  transform: translate($annotatorWidth - 40, 0);
+}
+
+#annotator-close-toggle:checked ~ div {
+  transform: translate($annotatorWidth, 0);
+}
+
+.annotator {
+  label {
+    display: block;
+    margin-top: 1rem;
+  }
+
+  details {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  textarea {
+    padding: .25rem;
+    width: 100%;
+  }
+
+  select,
+  input {
+    width: 100%;
+  }
+
+  button.btn-primary {
+    border: 1px solid black;
+    border-radius: 0;
+    padding: .75rem 1.25rem;
+    text-transform: uppercase;
+    width: 150px;
+  }
+}
+
+form {
+  border: 1px solid #cccccc;
+  padding: .3rem;
+}
+
+form ~ form {
+  margin-top: 1rem;
+}
