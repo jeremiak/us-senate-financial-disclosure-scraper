@@ -68,8 +68,9 @@ const Page = ({ reports }) => {
   )
 }
 
-Page.getInitialProps = async function() {
-  const reports = await http(`http://localhost:3000/api/reports`)
+Page.getInitialProps = async function({ req }) {
+  const { apiHost } = req.locales
+  const reports = await http(`${apiHost}/api/reports`)
   const json = await reports.json()
   const pdfReports = json.filter(report => report.pdf)
   return { reports: pdfReports }

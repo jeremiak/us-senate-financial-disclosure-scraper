@@ -75,8 +75,9 @@ const Page = ({ json, metadata, pdf, reportId }) => {
 }
 
 Page.getInitialProps = async function({ req, query }) {
+  const { apiHost } = req.locales
   const { id } = query
-  const reportReq = await http(`http://localhost:3000/api/report/${id}`)
+  const reportReq = await http(`${apiHost}/api/report/${id}`)
   const reportReqJson = await reportReq.json()
   const { json, metadata, pdf, reportId } = reportReqJson
 

@@ -13,6 +13,9 @@ const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== "production"
 const app = next({ dev })
 const handle = app.getRequestHandler()
+const apiHost = dev
+  ? `http://localhost:${port}`
+  : `https://senate-financial-disclosures.herokuapp.com`
 
 async function inventoryReport(reportId) {
   const metadata = manifestById[reportId]
@@ -154,6 +157,7 @@ app.prepare().then(async () => {
   })
 
   server.all(`*`, (req, res) => {
+    req.locales = { apiHost }
     return handle(req, res)
   })
 
