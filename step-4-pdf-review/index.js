@@ -96,7 +96,7 @@ async function saveReportJson(reportId, json) {
   let sha = null
   const encoded = Buffer.from(JSON.stringify(json, null, 2)).toString('base64')
   const fileName = `${reportId}.json`
-  const url = `${githubApiBaseUrl}/contents/${fileName}`
+  const url = `${githubApiBaseUrl}/contents/reports/${fileName}`
   const getReq = await fetch(url)
 
   if (getReq.status !== 404) {
