@@ -2,6 +2,21 @@ import React, { useState } from 'react'
 
 import Transaction from './Transaction'
 
+/*
+
+part 1 - charity donations
+part 2 - income
+part 3 - financial assets and unearned income
+part 4 - financial transactions
+part 5 - gifts
+part 6 - travel
+part 7 - liabilities
+part 8 - reportable position
+part 9 - outside arrangements
+part 10 - first report?
+
+*/
+
 const inputs = [
   {
     type: "select",
@@ -11,6 +26,7 @@ const inputs = [
       "Periodic transaction report",
       "Periodic transaction report amendment",
       "Annual report",
+      "Annual report amendment",
       "Annual report due date extension"
     ]
   },

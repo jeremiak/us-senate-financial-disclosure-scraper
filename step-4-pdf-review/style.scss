@@ -41,31 +41,47 @@ tbody tr:nth-child(odd) {
 }
 
 .report-annotator-container {
+  display: flex;
   position: relative;
   overflow-x: hidden;
 }
 
-.report-container,
-.report-container embed {
+.report-container {
+  align-items: center;
+  background-color: #ebebeb;
+  display: flex;
+  justify-content: center;
+  min-height: 80vh;
+  position: relative;
   width: 100%;
+
+  p {
+    color: #999999;
+    font-size: 1.2rem;
+  }
+
+  embed {
+    position: absolute;
+    width: 100%;
+  }
 }
+
 
 $annotatorWidth: 300px;
 
 .annotator-container {
-  border-width: 3px;
-  border-style: solid;
-  position: absolute;
+  min-height: 80vh;
   z-index: 100;
 }
 
 .annotator {
   background-color: white;
-  border: 1px solid black;
   display: block;
-  height: 70vh;
+  min-height: 70vh;
+  max-height: 70vh;
   padding: 1rem;
-  overflow-y: scroll;
+  padding-top: 0;
+  overflow-x: scroll;
   width: $annotatorWidth;
 }
 
