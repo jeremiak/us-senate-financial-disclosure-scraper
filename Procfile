@@ -1,1 +1,1 @@
-web: npm run pdf-review
+web: cd step-4-pdf-review && npx next build && node index.js
