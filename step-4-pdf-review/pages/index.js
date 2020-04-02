@@ -2,6 +2,22 @@ import http from 'isomorphic-fetch'
 import React from 'react'
 
 const Page = ({ reports }) => {
+
+  const state = reports.sort(function(a, b) {
+    if (!a.metadata) return -1
+    if (!b.metadata) return -1
+
+    const { reportDate: reportDateA } = a.metadata
+    const { reportDate: reportDateB } = b.metadata
+
+    const aDate = new Date(reportDateA)
+    const bDate = new Date(reportDateB)
+
+
+    return bDate - aDate
+  })
+  // const [state, updateState] = useState(sorted)
+
   return (
     <div>
       <h1>PDF Senate financial disclosure reports</h1>
@@ -10,6 +26,7 @@ const Page = ({ reports }) => {
         <thead>
           <tr>
             <th>#</th>
+            <th>Report Date</th>
             <th>Report ID</th>
             <th>Report title</th>
             <th>PDF</th>
@@ -17,11 +34,14 @@ const Page = ({ reports }) => {
           </tr>
         </thead>
         <tbody>
-          {reports.map((report, i) => {
-            const { metadata, reportId, pdf, json } = report
+          {state.map((report, i) => {
+            const { metadata = {}, reportId, pdf, json } = report
             return (
               <tr key={reportId}>
                 <td>{i + 1}</td>
+                <td>
+                  {metadata.reportDate}
+                </td>
                 <td>
                   <a href={`/report/${reportId}`}>{reportId}</a>
                 </td>

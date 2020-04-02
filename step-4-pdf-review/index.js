@@ -4,6 +4,7 @@ const util = require('util')
 
 const bodyParser = require('body-parser')
 const glob = util.promisify(require('glob'))
+const fetch = require('isomorphic-fetch')
 const express = require("express")
 const next = require("next")
 
@@ -17,6 +18,11 @@ manifest.forEach(report => {
 
   manifestById[reportId] = report
 })
+
+const githubApiBaseUrl = `https://api.github.com/repos/jeremiak/us-senate-financial-disclosure-data`
+const githubHeaders = {
+  Authorization: "token d79eb8558c93b17efad31513444c842edfd07d66"
+}
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== "production"
@@ -41,14 +47,23 @@ async function inventoryReport(reportId) {
 }
 
 async function inventoryReports() {
-  const globPath = `${dataPath}/reports/*.{html,json,pdf}`
-  const files = await glob(globPath)
-  // const reportsManifestFile = await fs.readFile(`${dataPath}/reports.json`)
-  // const reportsManifest = JSON.parse(reportsManifestFile.toString())
+  const commitsUrl = `${githubApiBaseUrl}/commits`
+  const commitsReq = await fetch(commitsUrl)
+  const commitsJson = await commitsReq.json()
+
+  const { sha: latestSha } = commitsJson[0]
+
+  const treeUrl = `${githubApiBaseUrl}/git/trees/${latestSha}`
+  const treeReq = await fetch(treeUrl)
+  const treeJson = await treeReq.json()
+  const { tree: files } = treeJson
+
+  // // const reportsManifestFile = await fs.readFile(`${dataPath}/reports.json`)
+  // // const reportsManifest = JSON.parse(reportsManifestFile.toString())
   const inventory = []
 
   files.forEach(file => {
-    const match = file.match(/([\d\-\w]+)\.(\w+)$/)
+    const match = file.path.match(/([\d\-\w]+)\.(\w+)$/)
     const reportId = match[1]
     const fileExt = match[2]
     const existing = inventory.find(d => d.reportId === reportId)
@@ -69,8 +84,32 @@ async function inventoryReports() {
 }
 
 async function saveReportJson(reportId, json) {
-  const reportPath = `${dataPath}/reports/${reportId}.json`
-  return fs.writeFile(reportPath, JSON.stringify(json, null, 2))
+  let sha = null
+  const encoded = Buffer.from(JSON.stringify(json, null, 2)).toString('base64')
+  const fileName = `${reportId}.json`
+  const url = `${githubApiBaseUrl}/contents/${fileName}`
+  const getReq = await fetch(url)
+
+  if (getReq.status !== 404) {
+    const getJson = await getReq.json()
+    sha = getJson.sha
+  }
+
+  console.log({ sha })
+
+  const saveReq = await fetch(url, {
+    method: `PUT`,
+    headers: githubHeaders,
+    body: JSON.stringify({
+      message: `${sha ? 'Update to' : 'Create'} ${fileName}`,
+      content: encoded,
+      sha
+    }),
+  })
+
+  const saveJson = await saveReq.json()
+
+  return saveJson
 }
 
 app.prepare().then(() => {

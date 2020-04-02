@@ -64,8 +64,7 @@ $annotatorWidth: 300px;
 
 .annotator {
   background-color: white;
-  border-bottom: 1px solid black;
-  border-left: 1px solid black;
+  border: 1px solid black;
   display: block;
   height: 70vh;
   padding: 1rem;
@@ -87,19 +86,19 @@ $annotatorWidth: 300px;
   width: 40px;
 }
 
-#annotator-close-toggle ~ label,
-#annotator-close-toggle ~ div {
-  transition: transform .7s ease-in;
-  transform: translate(0, 0);
-}
+// #annotator-close-toggle ~ label,
+// #annotator-close-toggle ~ div {
+//   transition: transform .7s ease-in;
+//   transform: translate(0, 0);
+// }
 
-#annotator-close-toggle:checked ~ label {
-  transform: translate($annotatorWidth - 40, 0);
-}
+// #annotator-close-toggle:checked ~ label {
+//   transform: translate($annotatorWidth - 40, 0);
+// }
 
-#annotator-close-toggle:checked ~ div {
-  transform: translate($annotatorWidth, 0);
-}
+// #annotator-close-toggle:checked ~ div {
+//   transform: translate($annotatorWidth, 0);
+// }
 
 .annotator {
   label {
@@ -125,9 +124,10 @@ $annotatorWidth: 300px;
   button.btn-primary {
     border: 1px solid black;
     border-radius: 0;
+    margin-bottom: 1.2rem;
     padding: .75rem 1.25rem;
     text-transform: uppercase;
-    width: 150px;
+    width: 100%;
   }
 }
 
