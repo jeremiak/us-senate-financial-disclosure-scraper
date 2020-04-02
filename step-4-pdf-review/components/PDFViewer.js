@@ -1,9 +1,9 @@
 import React from 'react'
 
-const PDFViewer = ({ reportId }) => {
+const PDFViewer = ({ url }) => {
   return (
     <embed
-      src={`http://localhost:3000/data/reports/${reportId}.pdf`}
+      src={`https://drive.google.com/viewerng/viewer?embedded=true&url=${url}`}
       height="800"
       type="application/pdf"
     />

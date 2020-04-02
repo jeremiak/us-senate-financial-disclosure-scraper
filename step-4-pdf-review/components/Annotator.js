@@ -152,15 +152,15 @@ const Annotator = ({ initialJson, reportId }) => {
           const { field, label, options, type } = input
 
           return (
-            <div>
-              <label key={field} for={field}>
+            <div key={field}>
+              <label key={field} htmlFor={field}>
                 {label}
               </label>
               {type === "select" ? (
-                <select onChange={createInputHandler(field)}>
+                <select onChange={createInputHandler(field)} defaultValue={state[field]}>
                   <option>--</option>
                   {options.map(option => (
-                    <option key={option} selected={option === state[field]}>
+                    <option key={option}>
                       {option}
                     </option>
                   ))}

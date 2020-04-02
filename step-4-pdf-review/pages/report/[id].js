@@ -4,46 +4,43 @@ import React, { useState } from "react"
 import Annotator from '../../components/Annotator'
 import PDFViewer from '../../components/PDFViewer'
 
-const Page = ({ json, metadata, reportId }) => {
-  const [state, updateState] = useState({
-    isDragging: false,
-    mouseX: null,
-    mouseY: null
-  })
-
-  const handleMouseDown = e => {
-    const nextState = Object.assign({}, state, {
-      isDragging: true
-    })
-
-    updateState(nextState)
-  }
-
-  const handleMouseMove = e => {
-    if (!state.isDragging) return
-  }
-
-  const handleMouseUp = e => {
-    const {screenX,screenY } = e
-    const nextState = Object.assign({}, state, {
-      isDragging: false,
-      mouseX:screenX,
-      mouseY:screenY
-    })
-
-    console.log({screenX,screenY })
-    debugger
-
-    updateState(nextState)
-  }
-
+const Page = ({ json, metadata, pdf, reportId }) => {
   const { firstName, lastName, reportLink, reportTitle } = metadata
   const title = reportTitle || `Report ${reportId}`
+
+  const [state, updateState] = useState({
+    isDragging: false,
+    left: 0,
+    top: 0,
+  })
+
+  function handleDragEnd(event) {
+    event.preventDefault()
+    const data = event.dataTransfer.getData("text/plain").split(',')
+    const left = event.screenX - parseInt(data[0], 10)
+    const top = event.screenY - parseInt(data[1], 10)
+
+    updateState({ isDragging: false, top, left })
+  } 
+
+  function handleDragStart(event) {
+    const { x, y } = event.target.getBoundingClientRect()
+    event.dataTransfer.setData('text/plain', `${x},${y}`)
+
+    const nextState = Object.assign({}, state, {
+      isDragging: true,
+    })
+    updateState(nextState)
+  } 
+
+  function handleDragOver(event) {
+    event.preventDefault()
+    return false
+  }
+
   return (
-    <div>
-      <h1>
-        {title} - {state.isDragging ? "dragging" : "not-dragging"}
-      </h1>
+    <div onDragOver={handleDragOver}>
+      <h1>{title}</h1>
       <p>
         Filed by {firstName} {lastName}.
       </p>
@@ -56,26 +53,20 @@ const Page = ({ json, metadata, reportId }) => {
       </p>
       <div className="report-annotator-container">
         <div className="report-container">
-          <PDFViewer reportId={reportId} />
+          <PDFViewer url={pdf} />
         </div>
         <div
           className="annotator-container"
+          draggable
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
           style={{
-            position: "fixed",
-            left: state.mouseX,
-            top: state.mouseY,
+            borderColor: state.isDragging ? "black" : "transparent",
+            position: "absolute",
+            left: `${state.left}px`,
+            top: `${state.top}px`
           }}
         >
-          {/* <input type="checkbox" id="annotator-close-toggle" />
-          <label for="annotator-close-toggle" on>X</label> */}
-          <button
-            draggable={true}
-            onDragStart={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onDragEnd={handleMouseUp}
-          >
-            Drag
-          </button>
           <Annotator reportId={reportId} initialJson={json} />
         </div>
       </div>
@@ -87,19 +78,13 @@ Page.getInitialProps = async function({ req, query }) {
   const { id } = query
   const reportReq = await http(`http://localhost:3000/api/report/${id}`)
   const reportReqJson = await reportReq.json()
-  const { json: jsonFileExists, metadata, reportId } = reportReqJson
-
-  let json = {}
-
-  if (jsonFileExists) {
-    const jsonReq = await http(`http://localhost:3000/data/reports/${id}.json`)
-    json = await jsonReq.json()
-  }
+  const { json, metadata, pdf, reportId } = reportReqJson
 
   return {
     reportId,
     metadata: metadata || {},
-    json
+    json,
+    pdf,
   }
 }
 

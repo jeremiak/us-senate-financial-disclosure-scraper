@@ -53,13 +53,10 @@ tbody tr:nth-child(odd) {
 $annotatorWidth: 300px;
 
 .annotator-container {
+  border-width: 3px;
+  border-style: solid;
   position: absolute;
-  top: 45px;
-  right: 0;
-
-  button {
-    display: block;
-  }
+  z-index: 100;
 }
 
 .annotator {
