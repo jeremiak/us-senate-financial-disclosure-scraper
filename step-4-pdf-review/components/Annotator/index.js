@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState } from "react"
 
-import Transaction from './Transaction'
+import Field from './Field'
+import PTR from './PeriodicTransactionReport'
 
+import senators from './senators'
 /*
 
 part 1 - charity donations
@@ -17,7 +19,7 @@ part 10 - first report?
 
 */
 
-const inputs = [
+const toplineFields = [
   {
     type: "select",
     field: "type",
@@ -27,136 +29,78 @@ const inputs = [
       "Periodic transaction report amendment",
       "Annual report",
       "Annual report amendment",
-      "Annual report due date extension"
-    ]
+      "Annual report due date extension",
+    ],
   },
   {
-    type: "text",
+    type: "select",
     field: "filer",
-    label: "Filer"
+    label: "Filer",
+    options: senators,
   },
   {
     type: "date",
-    field: "filedDate",
-    label: "Filed date"
+    field: "filed-date",
+    label: "Filed date",
   },
   {
     type: "time",
-    field: "filedTime",
-    label: "Filed time"
-  }
+    field: "filed-time",
+    label: "Filed time",
+  },
 ]
 
 const Annotator = ({ initialJson, reportId }) => {
   const [isSaving, updateSaving] = useState(false)
   const [state, updateState] = useState({
     type: initialJson.type || "",
-    // title: initialJson.title || "",
+    title: initialJson.title || "",
     filer: initialJson.filer || "",
-    filedDate: initialJson.filedDate || "",
-    filedTime: initialJson.filedTime || "",
-    data: initialJson.data || []
+    'filed-date': initialJson.filedDate || "",
+    'filed-time': initialJson.filedTime || "",
+    data: initialJson.data || [],
   })
 
-  const transactions = state.data.find(d => d.heading.includes('Transaction')) || {
-    heading: 'Transactions',
-    rows: [],
-  }
-
-  function addNewTransaction(e) {
-    e.preventDefault()
-    transactions.rows.push({
-      _created: new Date()
-    })
-    mergeDataByHeading(transactions)
-  }
 
   function createInputHandler(field) {
-    return function(e) {
-      mergeState({ [field]: e.target.value })
+    return function (e) {
+      const nextState = Object.assign({}, state, { [field]: e.target.value })
+      updateState(nextState)
     }
   }
 
-  function createRemoveTransactionHandler(i) {
-    return function(e) {
-      const { heading, rows } = transactions
-      const nextRows = rows.filter((transaction, ii) => {
-        return i !== ii
-      })
-
-      mergeDataByHeading({
-        heading,
-        rows: nextRows
-      })
-    }
-  }
-
-  function mergeDataByHeading(toMerge) {
-    const { heading } = toMerge
-    let headingExists = false
-    const nextData = state.data.map(d => {
-      if (d.heading === heading) {
-        headingExists = true
-        return toMerge
-      }
-
-      return d
-    })
-
-    if (!headingExists) {
-      nextData.push(toMerge)
-    }
-    
-    mergeState({ data: nextData })
-  }
-
-  function mergeState(toMerge) {
-    const nextState = Object.assign({}, state, toMerge)
+  function upsertData(data) {
+    const nextState = Object.assign({}, state, { data })
     updateState(nextState)
   }
 
-  function save() {
+  function stateToJson() {
+    const copy = JSON.parse(JSON.stringify(state))
+
+    copy.data.forEach(d => {
+      d.rows.forEach(dd => {
+        delete dd._id
+      })
+    })
+
+    return JSON.stringify(copy, null, 2)
+  }
+
+  async function save() {
     const url = `/api/report/${reportId}`
 
     updateSaving(true)
-    fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: stateToJson()
-    })
-      .then(() => {
-        updateSaving(false)
+
+    try {
+      await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: stateToJson(),
       })
-      .catch(err => {
-        console.error(err)
-        updateSaving(false)
-      })
-  }
-
-  function stateToJson() {
-    const dataKeysToRemove = ['_created']
-    const modifiedData = state.data.map(d => {
-      const { heading, rows } = d
-      const modifiedRows = rows.map(row => {
-        const copy = Object.assign({}, row)
-
-        dataKeysToRemove.forEach(key => {
-          delete copy[key]
-        })
-
-        return copy
-      })
-
-      return { heading, rows: modifiedRows }
-    })
-    const toJson = Object.assign({}, state, { data: modifiedData })
-    return JSON.stringify(toJson, null, 2)
-  }
-
-  function updateTransactionRow(i) {
-    return function(key, value) {
-      transactions.rows[i][key] = value
-      mergeDataByHeading(transactions)
+      updateSaving(false)
+    } catch (e) {
+      console.error(err)
+      updateSaving(false)
     }
   }
 
@@ -164,51 +108,23 @@ const Annotator = ({ initialJson, reportId }) => {
     <div className="annotator">
       <form>
         <legend>Report information</legend>
-        {inputs.map(input => {
+        {toplineFields.map((input) => {
           const { field, label, options, type } = input
 
           return (
-            <div key={field}>
-              <label key={field} htmlFor={field}>
-                {label}
-              </label>
-              {type === "select" ? (
-                <select onChange={createInputHandler(field)} defaultValue={state[field]}>
-                  <option>--</option>
-                  {options.map(option => (
-                    <option key={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <input
-                  type={type}
-                  id={field}
-                  onChange={createInputHandler(field)}
-                  value={state[field]}
-                />
-              )}
-            </div>
+            <Field
+              key={field}
+              field={field}
+              label={label}
+              onChange={createInputHandler(field)}
+              options={options}
+              type={type}
+              value={state[field]}
+            />
           )
         })}
       </form>
-      <form>
-        <legend>Transactions ({transactions.rows.length})</legend>
-        {transactions.rows.map((transaction, i) => (
-          <Transaction
-            key={transaction._created}
-            amountRange={transaction.amountRange}
-            assetId={transaction.assetId}
-            date={transaction.date}
-            onChange={updateTransactionRow(i)}
-            onRemove={createRemoveTransactionHandler(i)}
-            transactor={transaction.transactor}
-            type={transaction.type}
-          />
-        ))}
-        <button onClick={addNewTransaction}>Add transaction</button>
-      </form>
+      <PTR onChange={upsertData} isAmended={false} data={state.data} />
       <details>
         <summary>See as JSON</summary>
         <textarea rows="20" cols="70" disabled={true} value={stateToJson()} />

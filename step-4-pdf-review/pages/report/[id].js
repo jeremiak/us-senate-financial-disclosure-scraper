@@ -22,7 +22,6 @@ const Page = ({ json, metadata, pdf, reportId }) => {
       </p>
       <div className="report-annotator-container">
         <div className="report-container">
-          <p>Loading the PDF report...</p>
           <PDFViewer url={pdf} />
         </div>
         <div className="annotator-container">

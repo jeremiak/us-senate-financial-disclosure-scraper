@@ -28,6 +28,7 @@
     "puppeteer": "^2.1.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-pdf": "^4.1.0",
     "sass": "^1.26.3"
   },
   "devDependencies": {

@@ -12,37 +12,41 @@ i think it works for:
 - candidate report (2f291525-7cef-445a-841d-35d0ca75c68a.html)
 */
 
-const fs = require('fs').promises
+const fs = require("fs").promises
 
-const cheerio = require('cheerio')
-const glob = require('glob')
-const { default: Queue } = require('p-queue')
+const cheerio = require("cheerio")
+const glob = require("glob")
+const kebab = require("lodash.kebabcase")
+const { default: Queue } = require("p-queue")
 
 function extractTables(html) {
   const $ = cheerio.load(html)
 
   const sections = $(`.card`)
     .toArray()
-    .map(section => {
-
+    .map((section) => {
       const tableHeadRowSelector = `table thead tr`
       const tableBodyRowSelector = `table tbody tr`
-      
-      const heading = $(section).find("h3")
+
+      const headingText = $(section)
+        .find("h3")
         .text()
         .trim()
+        .replace(/\s+/g, " ")
+      const amended = headingText.includes(" Amended")
+      const heading = headingText.replace(" Amended", "")
       const tableHeadRows = $(section).find(tableHeadRowSelector)
       const tableBodyRows = $(section).find(tableBodyRowSelector)
 
       const tableColumns = tableHeadRows
         .find("th")
         .toArray()
-        .map(th => {
+        .map((th) => {
           const text = $(th).text()
-          return text
+          return kebab(text)
         })
 
-      const rows = tableBodyRows.toArray().map(tr => {
+      const rows = tableBodyRows.toArray().map((tr) => {
         const row = {}
 
         $(tr)
@@ -51,11 +55,11 @@ function extractTables(html) {
           .forEach((td, i) => {
             const column = tableColumns[i]
 
-            if ([''].includes(column)) return
+            if ([""].includes(column)) return
 
-            row[column] = $(td)
-              .text()
-              .trim()
+            const text = $(td).text().trim()
+
+            row[column] = text.replace(/\,$/, "")
           })
 
         return row
@@ -63,7 +67,8 @@ function extractTables(html) {
 
       return {
         heading,
-        rows 
+        amended,
+        rows,
       }
     })
 
@@ -74,21 +79,51 @@ async function extractData(path) {
   console.log(`Extracting data from ${path}`)
   const file = await fs.readFile(path)
   const html = file.toString()
-  const outputPath = path.replace('.html', '.json')
+  const outputPath = path.replace(".html", ".json")
   const $ = cheerio.load(html)
 
   const reportTitleSelector = `h1`
   const reportFilerSelector = `h2.filedReport`
   const reportFiledDateSelector = `${reportFilerSelector} + p.muted`
 
-  const reportTitle = $(reportTitleSelector).text().trim().replace(/\s+/g, ' ')
-  const reportFiler = $(reportFilerSelector).text().trim().replace(/\s+/g, ' ')
-  const reportFiledDate = $(reportFiledDateSelector).text().trim().replace(/\s+/g, ' ')
-  
+  const reportTitle = $(reportTitleSelector).text().trim().replace(/\s+/g, " ")
+  const reportFiler = $(reportFilerSelector).text().trim().replace(/\s+/g, " ")
+  const reportFiledDate = $(reportFiledDateSelector)
+    .text()
+    .trim()
+    .replace(/\s+/g, " ")
+    .match(/Filed (\d+\/\d+\/\d+) @ (\d+:\d+ \w+)/)
+
+  const calendarYearMatch = reportTitle.match(/Calendar (\d+)/)
+  const calendarYear = calendarYearMatch ? calendarYearMatch[1] : null
+  const isAmendment = reportTitle.includes("Amendment")
+  let reportType = "periodic transaction"
+
+  if (reportTitle.includes("Periodic Transaction Report") && isAmendment) {
+    reportType = "periodic transaction amendment"
+  } else if (reportTitle.includes("Annual Report") && isAmendment) {
+    reportType = "annual report amendment"
+  } else if (reportTitle.includes("Annual Report")) {
+    reportType = "annual report"
+  }
+
+  // if (!reportFiledDate) {
+  //   console.log({
+  //     reportFiledDateSelector,
+  //     path,
+  //     reportTitle,
+  //     reportFiledDate,
+  //   })
+  // }
+
   const report = {
+    type: reportType,
     title: reportTitle,
     filer: reportFiler,
-    filedDate: reportFiledDate,
+    "filed-date": reportFiledDate ? reportFiledDate[1] : null,
+    "filed-time": reportFiledDate ? reportFiledDate[2] : null,
+    "calendar-year": calendarYear,
+    "data-entry-complete": true,
     data: extractTables(html),
   }
 
@@ -97,20 +132,20 @@ async function extractData(path) {
   return
 }
 
-glob('./data/reports/*.html', (err, files) => {
+glob("./data/reports/*.html", (err, files) => {
   if (err) {
     console.error(err)
     return
   }
   const queue = new Queue({ concurrency: 2 })
 
-  files.forEach(file => {
+  files.forEach((file) => {
     queue.add(() => {
       return extractData(file)
     })
   })
 
   queue.onIdle().then(() => {
-    console.log('All done')
+    console.log("All done")
   })
 })

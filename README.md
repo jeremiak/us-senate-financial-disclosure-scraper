@@ -68,3 +68,114 @@ I think the best thing would be to make a CSV per major section in each annual r
 * `travel.csv`
 * `liabilities.csv`
 * `positions.csv`
+
+
+## Data model
+
+1. `type` - [Annual, annual amendment, periodic transaction]
+1. `title` - Report title
+1. `filer` - Senator's name (should be from drop down so standardized)
+1. `filed-date` - Date received by the clerk
+1. `filed-time` - Time receieved by the clerk
+1. `calendar-year` [if annual report]
+1. `dataEntryComplete` - Supplied by the report digitizer, if they are done with the document
+1. `data` - most of the data from the report
+
+data is an array of objects
+- `label`
+- `amended` - boolean
+- `rows`
+
+`label`:
+- Part 1. Honoraria Payments or Payments to Charity in Lieu of Honoraria
+`rows`:
+-- `date`
+-- `activity`
+-- `amount`
+-- `who-paid`
+-- `who-received-payment`
+
+- Part 2. Earned and Non-Investment Income 
+`rows`:
+-- `who-was-paid`
+-- `type`
+-- `who-paid`
+-- `amount-paid`
+
+
+- Part 3. Assets 
+`rows`:
+-- `asset`
+-- `asset-type`
+-- `owner`
+-- `value` - Range
+-- `income-type`
+-- `income`
+
+- Part 4a. Periodic Transaction Report Summary
+- Part 4b. Transactions 
+`rows`:
+-- `owner`
+-- `ticker`
+-- `asset-name`
+-- `transaction-type`
+-- `transaction-date`
+-- `amount`
+-- `comment`
+
+- Part 5. Gifts
+
+- Part 6. Travel
+`rows`:
+-- `date(s)`
+-- `traveler(s)`
+-- `travel-type`
+-- `itinerary`
+-- `reimbursed-for`
+-- `who-paid`
+-- `comment`
+
+- Part 7. Liabilities
+`rows`:
+-- `incurred`
+-- `debtor`
+-- `type`
+-- `points`
+-- `rate(term)`
+-- `amount`
+-- `creditor`
+-- `comments`
+
+- Part 8. Positions
+`rows`:
+-- `position-dates`
+-- `position-held`
+-- `entity`
+-- `entity-type`
+-- `comments`
+
+- Part 9. Agreements
+`rows`:
+-- `date`
+-- `parties-involved`
+-- `type`
+-- `status-and-terms`
+
+- Part 10. Compensation
+- Attachments & Comments
+`rows`:
+-- `document-title`
+-- `document-url`
+-- `date-time-added`
+
+If PTR
+- Transactions
+`rows`:
+-- `transaction-date`
+-- `owner`
+-- `ticker`
+-- `asset-name`
+-- `asset-type`
+-- `transaction-type`
+-- `amount`
+-- `comment`
