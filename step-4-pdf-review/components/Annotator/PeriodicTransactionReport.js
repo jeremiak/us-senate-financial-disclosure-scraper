@@ -12,7 +12,6 @@ const transactionFields = [
   },
   { field: "ticker", label: "Ticker", type: "text" },
   { field: "asset-name", label: "Asset name", type: "text" },
-  { field: "asset-type", label: "Asset type", type: "text" },
   {
     field: "transaction-type",
     label: "Transaction type",
@@ -37,7 +36,6 @@ const transactionFields = [
       "Over $50,000,000",
     ],
   },
-  { field: "comment", label: "Comment", type: "text" },
 ]
 
 const PTR = ({ onChange, data }) => {
