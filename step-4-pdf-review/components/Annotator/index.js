@@ -56,8 +56,8 @@ const Annotator = ({ initialJson, reportId }) => {
     type: initialJson.type || "",
     title: initialJson.title || "",
     filer: initialJson.filer || "",
-    'filed-date': initialJson.filedDate || "",
-    'filed-time': initialJson.filedTime || "",
+    'filed-date': initialJson['filed-date'] || "",
+    'filed-time': initialJson['filed-time'] || "",
     data: initialJson.data || [],
   })
 
