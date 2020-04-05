@@ -54,10 +54,10 @@ const PTR = ({ onChange, data }) => {
       _id: new Date()
     }
     const copy = transactions.slice()
-    copy.push(newTransaction)
 
     transactionFields.forEach(({ field }) => (newTransaction[field] = ""))
-
+    copy.push(newTransaction)
+    
     onChange([
       { heading: "Transactions", amended: false, rows: copy },
     ])

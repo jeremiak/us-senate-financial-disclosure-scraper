@@ -4,7 +4,7 @@ import { Document, Page } from "react-pdf"
 const PDFViewer = ({ url }) => {
   const [rotation, updateRotation] = useState(0)
   const [pageCount, updatePageCount] = useState(0)
-  const [zoom, updateZoom] = useState(1)
+  const [zoom, updateZoom] = useState(1.1)
   const pages = []
 
   for (var i = 1; i <= pageCount; i++) {
@@ -51,6 +51,7 @@ const PDFViewer = ({ url }) => {
             <Page
               height={300}
               pageNumber={page}
+              renderMode="svg"
               rotate={rotation}
               scale={zoom}
             />

@@ -4,13 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "all": "node step-1-get-report-urls.js && node step-2-download-reports.js && node step-3-parse-html-reports.js && node step-4-pdfs.js",
+    "start": "node step-1-get-report-urls.js && node step-2-download-reports.js && node step-3-parse-html-reports.js && bash step-4-pull-pdf-data.sh && node step-5-combine-to-csv.js",
     "pdf-review": "cd pdf-review && node index.js",
     "pdf-review:dev": "cd pdf-review && nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "@jeremiak",
   "license": "CC-BY-SA",
   "dependencies": {
     "body-parser": "^1.19.0",

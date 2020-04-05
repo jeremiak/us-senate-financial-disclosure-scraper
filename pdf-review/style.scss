@@ -59,7 +59,7 @@ tbody tr:nth-child(odd) {
   flex-direction: column;
   justify-content: center;
   padding: 1rem;
-  position: sticky;
+  position: absolute;
   left: 0;
   top: 0;
   width: 10%;
@@ -67,11 +67,16 @@ tbody tr:nth-child(odd) {
 }
 
 .pdf-viewer-document {
+  height: 70vh;
+  padding-top: 2rem;
+  overflow: scroll;
+}
+
+.react-pdf__Document {
   align-items: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  overflow: scroll;
 }
 
 $annotatorWidth: 300px;
