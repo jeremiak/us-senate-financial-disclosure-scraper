@@ -23,8 +23,10 @@ Then you can run each step of the workflow as a Node script:
 1. `$ node step-1-get-report-urls.js`
 1. `$ node step-2-download-reports.js`
 1. `$ node step-3-parse-html-reports.js`
-1. `$ node step-4-pdfs.js` - This does nothing really, still have to figure this part out
+1. `$ (cd data && git pull origin master)`
 1. `$ node step-5-combine-to-csv.js`
+
+Step 4 is an option step, and you run it with `npm run pdf-review`. It is a web app that makes it a bit easier to read a PDF and convert it into structured data.
 
 
 ### Step 1 - Get report URLs
@@ -175,7 +177,6 @@ If PTR
 -- `owner`
 -- `ticker`
 -- `asset-name`
--- `asset-type`
 -- `transaction-type`
 -- `amount`
 -- `comment`
