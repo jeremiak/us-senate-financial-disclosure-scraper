@@ -36,9 +36,9 @@ async function getReportUrls () {
 
       rows.forEach(row => {
         const cells = row.querySelectorAll('td')
-        const lastName = cells[0].innerText
-        const firstName = cells[1].innerText
-        const fullName = cells[2].innerText
+        const firstName = cells[0].innerText
+        const lastName = cells[1].innerText
+        const office = cells[2].innerText
         const reportDate = cells[4].innerText
 
         const reportAnchor = cells[3].querySelector('a')
@@ -48,7 +48,7 @@ async function getReportUrls () {
         data.push({
           lastName,
           firstName,
-          fullName,
+          office,
           reportDate,
           reportTitle,
           reportLink,

@@ -29,6 +29,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-pdf": "^4.1.0",
+    "react-table": "^7.0.4",
     "sass": "^1.26.3"
   },
   "devDependencies": {

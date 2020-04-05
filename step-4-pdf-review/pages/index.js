@@ -1,78 +1,75 @@
-import http from 'isomorphic-fetch'
-import React from 'react'
+import http from "isomorphic-fetch"
+import React, { useMemo } from "react"
+
+import Table from "../components/Table"
 
 const Page = ({ reports }) => {
+  const state = useMemo(() => reports
+    .sort(function (a, b) {
+      if (!a.metadata) return -1
+      if (!b.metadata) return -1
 
-  const state = reports.sort(function(a, b) {
-    if (!a.metadata) return -1
-    if (!b.metadata) return -1
+      const { reportDate: reportDateA } = a.metadata
+      const { reportDate: reportDateB } = b.metadata
 
-    const { reportDate: reportDateA } = a.metadata
-    const { reportDate: reportDateB } = b.metadata
+      const aDate = new Date(reportDateA)
+      const bDate = new Date(reportDateB)
 
-    const aDate = new Date(reportDateA)
-    const bDate = new Date(reportDateB)
+      return bDate - aDate
+    })
+    .map((report) => {
+      const { metadata = {}, reportId, json } = report
 
+      return {
+        date: metadata.reportDate,
+        senator: `${metadata.firstName} ${metadata.lastName}`,
+        title: metadata.reportTitle,
+        link: `/report/${reportId}`,
+        json: json ? "Yes" : "No",
+      }
+    }), [reports.length])
 
-    return bDate - aDate
-  })
-  // const [state, updateState] = useState(sorted)
+  const columns = [
+    {
+      Header: "Report date",
+      accessor: "date",
+      sortType: "basic",
+    },
+    {
+      Header: "Senator",
+      accessor: "senator",
+      sortType: "basic",
+    },
+    {
+      Header: "Report Title",
+      accessor: "title",
+      sortType: "basic",
+    },
+    {
+      Header: "Link",
+      accessor: "link",
+      sortType: "basic",
+    },
+    {
+      Header: "Has JSON",
+      accessor: "json",
+      sortType: "basic",
+    },
+  ]
 
   return (
     <div>
       <h1>PDF Senate financial disclosure reports</h1>
-
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Report Date</th>
-            <th>Report ID</th>
-            <th>Report title</th>
-            <th>PDF</th>
-            <th>JSON</th>
-          </tr>
-        </thead>
-        <tbody>
-          {state.map((report, i) => {
-            const { metadata = {}, reportId, pdf, json } = report
-            return (
-              <tr key={reportId}>
-                <td>{i + 1}</td>
-                <td>
-                  {metadata.reportDate}
-                </td>
-                <td>
-                  <a href={`/report/${reportId}`}>{reportId}</a>
-                </td>
-                <td>
-                  {metadata && (
-                    <>
-                      <p>
-                        <span>{metadata.firstName} {metadata.lastName}</span>
-                      </p>
-                      <p>
-                        <em>{metadata.reportTitle}</em>
-                      </p>
-                    </>
-                  )}
-                </td>
-                <td>{pdf ? "Yes" : "No"}</td>
-                <td>{json ? "Yes" : "No"}</td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
+      <Table columns={columns} data={state} />
     </div>
   )
 }
 
-Page.getInitialProps = async function({ req }) {
+Page.getInitialProps = async function ({ req }) {
   const { apiHost } = req.locales
   const reports = await http(`${apiHost}/api/reports`)
   const json = await reports.json()
-  const pdfReports = json.filter(report => report.pdf)
+  const pdfReports = json.filter((report) => report.pdf)
   return { reports: pdfReports }
 }
 
