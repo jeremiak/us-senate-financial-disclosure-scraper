@@ -46,26 +46,33 @@ tbody tr:nth-child(odd) {
   overflow-x: hidden;
 }
 
-.report-container {
-  align-items: center;
+.pdf-viewer {
   background-color: #ebebeb;
-  display: flex;
-  justify-content: center;
-  min-height: 80vh;
   position: relative;
   width: 100%;
-
-  p {
-    color: #999999;
-    font-size: 1.2rem;
-  }
-
-  embed {
-    position: absolute;
-    width: 100%;
-  }
 }
 
+.pdf-viewer-buttons {
+  align-items: center;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem;
+  position: sticky;
+  left: 0;
+  top: 0;
+  width: 10%;
+  z-index: 20;
+}
+
+.pdf-viewer-document {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: scroll;
+}
 
 $annotatorWidth: 300px;
 
@@ -83,70 +90,48 @@ $annotatorWidth: 300px;
   padding-top: 0;
   overflow-x: scroll;
   width: $annotatorWidth;
-}
-
-#annotator-close-toggle {
-  position: absolute;
-  left: -9999px;
-}
-
-#annotator-close-toggle ~ label {
-  align-items: center;
-  background-color: gold;
-  display: flex;
-  height: 40px;
-  justify-content: center;
-  width: 40px;
-}
-
-// #annotator-close-toggle ~ label,
-// #annotator-close-toggle ~ div {
-//   transition: transform .7s ease-in;
-//   transform: translate(0, 0);
-// }
-
-// #annotator-close-toggle:checked ~ label {
-//   transform: translate($annotatorWidth - 40, 0);
-// }
-
-// #annotator-close-toggle:checked ~ div {
-//   transform: translate($annotatorWidth, 0);
-// }
-
-.annotator {
-  label {
-    display: block;
-    margin-top: 1rem;
-  }
-
-  details {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-  }
-
-  textarea {
-    padding: .25rem;
-    width: 100%;
-  }
-
-  select,
-  input {
-    width: 100%;
-  }
-
-  button.btn-primary {
-    border: 1px solid black;
-    border-radius: 0;
-    margin-bottom: 1.2rem;
-    padding: .75rem 1.25rem;
-    text-transform: uppercase;
-    width: 100%;
+  
+  button {
+    padding: .75rem;
   }
 }
 
-form {
-  border: 1px solid #cccccc;
-  padding: .3rem;
+fieldset {
+  padding: 0;
+  padding-left: 1rem;
+  margin-top: .3rem;
+}
+
+label {
+  display: block;
+  margin-top: 1rem;
+}
+
+details {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+textarea {
+  padding: .25rem;
+  width: 100%;
+}
+
+select,
+input {
+  font-size: 1.1rem;
+  padding: .1rem;
+  width: 100%;
+}
+
+button {
+  border: 1px solid black;
+  border-radius: 0;
+  margin-bottom: .3rem;
+  margin-top: .6rem;
+  text-transform: uppercase;
+  text-align: center;
+  width: 100%;
 }
 
 form ~ form {
