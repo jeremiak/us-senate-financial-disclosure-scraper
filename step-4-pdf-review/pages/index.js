@@ -5,6 +5,7 @@ import Table from "../components/Table"
 
 const Page = ({ reports }) => {
   const state = useMemo(() => reports
+    .filter(report => report.metadata)
     .sort(function (a, b) {
       if (!a.metadata) return -1
       if (!b.metadata) return -1
@@ -18,7 +19,7 @@ const Page = ({ reports }) => {
       return bDate - aDate
     })
     .map((report) => {
-      const { metadata = {}, reportId, json } = report
+      const { metadata, reportId, json } = report
 
       return {
         date: metadata.reportDate,
@@ -28,6 +29,12 @@ const Page = ({ reports }) => {
         json: json ? "Yes" : "No",
       }
     }), [reports.length])
+
+  const randomPTRReport = useMemo(() => {
+    const PTRReports = state.filter(report => report.title.includes("Periodic") && report.json === 'No')
+    const random = parseInt(Math.random() * PTRReports.length)
+    return PTRReports[random]
+  }, [state.length])
 
   const columns = [
     {
@@ -60,6 +67,7 @@ const Page = ({ reports }) => {
   return (
     <div>
       <h1>PDF Senate financial disclosure reports</h1>
+      <p>Hey there, grab a report from below to see the data or help us digitize it. If you're just looking for a place to start, <a href={randomPTRReport.link}>click here :)</a>.</p>
       <Table columns={columns} data={state} />
     </div>
   )

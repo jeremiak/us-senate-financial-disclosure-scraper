@@ -42,7 +42,7 @@ const Table = ({ columns, data }) => {
                 let cellContents
 
                 if (isLinkColumn) {
-                  cellContents = <a href={cell.value}>{cellContents}</a>
+                  cellContents = <a href={cell.value}>{cell.value}</a>
                 } else {
                   cellContents = cell.render('Cell')
                 }
