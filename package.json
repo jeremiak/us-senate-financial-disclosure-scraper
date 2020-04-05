@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "all": "node step-1-get-report-urls.js && node step-2-download-reports.js && node step-3-parse-html-reports.js && node step-4-pdfs.js",
-    "pdf-review": "cd step-4-pdf-review && node index.js",
-    "pdf-review:dev": "cd step-4-pdf-review && nodemon index.js",
+    "pdf-review": "cd pdf-review && node index.js",
+    "pdf-review:dev": "cd pdf-review && nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
