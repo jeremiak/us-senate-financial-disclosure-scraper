@@ -66,8 +66,9 @@ tbody tr:nth-child(odd) {
   z-index: 20;
 }
 
+$height: 80vh;
 .pdf-viewer-document {
-  height: 70vh;
+  height: $height;
   padding-top: 2rem;
   overflow: scroll;
 }
@@ -79,10 +80,18 @@ tbody tr:nth-child(odd) {
   justify-content: center;
 }
 
+.react-pdf__Page {
+  margin-bottom: 2rem;
+}
+
+.react-pdf__Page:last-child {
+  margin-bottom: 0;
+}
+
 $annotatorWidth: 300px;
 
 .annotator-container {
-  min-height: 80vh;
+  min-height: $height;
   z-index: 100;
 }
 

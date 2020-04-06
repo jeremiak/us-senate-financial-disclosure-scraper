@@ -2,9 +2,9 @@ import React, { useState } from "react"
 import { Document, Page } from "react-pdf"
 
 const PDFViewer = ({ url }) => {
-  const [rotation, updateRotation] = useState(0)
+  const [rotation, updateRotation] = useState(270)
   const [pageCount, updatePageCount] = useState(0)
-  const [zoom, updateZoom] = useState(1.1)
+  const [zoom, updateZoom] = useState(2.1)
   const pages = []
 
   for (var i = 1; i <= pageCount; i++) {
