@@ -76,7 +76,8 @@ async function getReportUrls () {
 
   await browser.close()
   await fs.writeFile('./data/reports.json', JSON.stringify(scrapeData, null, 2))
-  console.log('All done with step 1')
+  console.log('All done with step 1, created data/reports.json')
 }
 
+console.log('Trying to get a list of all available reports for current senators')
 getReportUrls()

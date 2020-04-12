@@ -38,7 +38,9 @@ Uses the `data/reports.json` file generated in step 1 to download a copy of all 
 
 Extract data from all `.html` files and create a `.json` file for each.
 
-### Step 4 - Pull down manually reviewed PDFs
+Both steps 3 and 4 rely on an [internal, intermediary JSON data model](#json-data-model), which contain the structured data from the financial disclosure reports.
+
+### Step 4 - Pull down data from manually reviewed PDFs
 
 Lots of the reports are structure HTML, which is great because we can parse those and extract data. In fact, we just did that in step 3.
 
@@ -46,7 +48,7 @@ A number of the reports are still filed on paper and are therefore pages of scan
 
 ### Step 5 - Create CSVs
 
-* `transactions.csv` - all of the transactions from the filings
+* `transactions.csv` - Transactions from parts 4a and 4b of annual reports and from periodic transaction reports
 
 _To do_:
 
@@ -75,111 +77,112 @@ If you want to run it locally, you can do:
 
 <hr />
 
-## Data model
+## JSON data model
 
-1. `type` - [Annual, annual amendment, periodic transaction]
-1. `title` - Report title
-1. `filer` - Senator's name (should be from drop down so standardized)
-1. `filed-date` - Date received by the clerk
-1. `filed-time` - Time receieved by the clerk
-1. `calendar-year` [if annual report]
-1. `dataEntryComplete` - Supplied by the report digitizer, if they are done with the document
-1. `data` - most of the data from the report
+This is not the structure of the generated CSV files, but instead if the structure of the JSON files that are the intermediary stage between scraping and the published CSVs.
 
-data is an array of objects
-- `label`
-- `amended` - boolean
-- `rows`
+At the top level, each report's JSON file looks like:
+- `type` - [Annual, annual amendment, periodic transaction]
+- `title` - Report title
+- `filer` - Senator's name (should be from drop down so standardized)
+- `filed-date` - Date received by the clerk
+- `filed-time` - Time received by the clerk
+- `calendar-year` [if annual report]
+- `data` - An array of objects, represents the data from the report
 
-`label`:
-- Part 1. Honoraria Payments or Payments to Charity in Lieu of Honoraria
-`rows`:
--- `date`
--- `activity`
--- `amount`
--- `who-paid`
--- `who-received-payment`
+Each object within `data` will have the following structure:
+- `label` - A string, represents the sections of an annual report. In the case of a periodic transaction report, it will be "Transactions"
+- `amended` - A boolean, if the section of the report represents an amendment
+- `rows` - An array of objects that represent the data from each section or report
 
-- Part 2. Earned and Non-Investment Income 
-`rows`:
--- `who-was-paid`
--- `type`
--- `who-paid`
--- `amount-paid`
+There are many different possible values for `label`, and the structure of each object in `rows` depends on the label. Generally speaking, each refers to a section of a report, and therefore they vary by report type.
+
+### Annual report possible `label` values
+
+**Part 1. Honoraria Payments or Payments to Charity in Lieu of Honoraria**
+- `date`
+- `activity`
+- `amount`
+- `who-paid`
+- `who-received-payment`
 
 
-- Part 3. Assets 
-`rows`:
--- `asset`
--- `asset-type`
--- `owner`
--- `value` - Range
--- `income-type`
--- `income`
+**Part 2. Earned and Non-Investment Income**
+- `who-was-paid`
+- `type`
+- `who-paid`
+- `amount-paid`
 
-- Part 4a. Periodic Transaction Report Summary
-- Part 4b. Transactions 
-`rows`:
--- `owner`
--- `ticker`
--- `asset-name`
--- `transaction-type`
--- `transaction-date`
--- `amount`
--- `comment`
 
-- Part 5. Gifts
+**Part 3. Assets**
+- `asset`
+- `asset-type`
+- `owner`
+- `value` - Range
+- `income-type`
+- `income`
 
-- Part 6. Travel
-`rows`:
--- `date(s)`
--- `traveler(s)`
--- `travel-type`
--- `itinerary`
--- `reimbursed-for`
--- `who-paid`
--- `comment`
+**Part 4a. Periodic Transaction Report Summary** / 
+**Part 4b. Transactions**
+- `owner`
+- `ticker`
+- `asset-name`
+- `transaction-type`
+- `transaction-date`
+- `amount`
+- `comment`
 
-- Part 7. Liabilities
-`rows`:
--- `incurred`
--- `debtor`
--- `type`
--- `points`
--- `rate(term)`
--- `amount`
--- `creditor`
--- `comments`
+**Part 5. Gifts**
 
-- Part 8. Positions
-`rows`:
--- `position-dates`
--- `position-held`
--- `entity`
--- `entity-type`
--- `comments`
+**Part 6. Travel**
+- `date(s)`
+- `traveler(s)`
+- `travel-type`
+- `itinerary`
+- `reimbursed-for`
+- `who-paid`
+- `comment`
 
-- Part 9. Agreements
-`rows`:
--- `date`
--- `parties-involved`
--- `type`
--- `status-and-terms`
+**Part 7. Liabilities**
+- `incurred`
+- `debtor`
+- `type`
+- `points`
+- `rate(term)`
+- `amount`
+- `creditor`
+- `comments`
 
-- Part 10. Compensation
-- Attachments & Comments
-`rows`:
--- `document-title`
--- `document-url`
--- `date-time-added`
+**Part 8. Position**
+- `position-dates`
+- `position-held`
+- `entity`
+- `entity-type`
+- `comments`
 
-If PTR
-- Transactions
-`rows`:
--- `transaction-date`
--- `owner`
--- `ticker`
--- `asset-name`
--- `transaction-type`
--- `amount`
--- `comment`
+**Part 9. Agreement**
+- `date`
+- `parties-involved`
+- `type`
+- `status-and-terms`
+
+**Part 10. Compensation**
+
+
+**Attachments & Comment**
+- `document-title`
+- `document-url`
+- `date-time-added`
+
+### Periodic transaction report possible `label` values
+
+There is only one possible value in the case of a PTR.
+
+**Transaction**
+- `transaction-date`
+- `owner`
+- `ticker`
+- `asset-name`
+- `transaction-type`
+- `amount`
+- `comment`

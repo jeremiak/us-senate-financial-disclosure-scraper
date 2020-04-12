@@ -5,6 +5,7 @@ const glob = require('glob')
 const kebabCase = require('lodash.kebabcase')
 const { default: Queue } = require('p-queue')
 
+console.log('Starting to find all the JSON files and combine them into CSVs')
 glob('data/reports/*.json', async function (err, files) {
   if (err) {
     console.error(err)
@@ -41,7 +42,7 @@ glob('data/reports/*.json', async function (err, files) {
       }
 
       Object.keys(row).forEach(key => {
-        obj[kebabCase(key)] = row[key]
+        obj[kebabCase(key)] = row[key].replace(/\s+/g, ' ')
       })
 
       transactions.push(obj)
@@ -62,8 +63,10 @@ glob('data/reports/*.json', async function (err, files) {
     })
   })
 
+  console.log("Found 'em, writing to disk")
   queue.onIdle().then(async () => {
     const transactions = d3.csvFormat(allTransactions.flat())
     await fs.writeFile("transactions.csv", transactions)
+    console.log(`All done, created:\n * transactions.csv (${transactions.length} rows)`)
   })
 })
