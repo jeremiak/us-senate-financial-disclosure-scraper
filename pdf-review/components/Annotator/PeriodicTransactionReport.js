@@ -8,7 +8,7 @@ const transactionFields = [
     field: "owner",
     label: "Owner",
     type: "select",
-    options: ["Filer", "Spouse", "Dependent child", "Joint"],
+    options: ["Self", "Spouse", "Dependent child", "Joint"],
   },
   { field: "ticker", label: "Ticker", type: "text" },
   { field: "asset-name", label: "Asset name", type: "text" },
