@@ -14,13 +14,25 @@ glob('data/reports/*.json', async function (err, files) {
 
   const queue = new Queue({ concurrency: 2 })
 
+  function parseFilerName(filer) {
+    return filer.match(/\((.*)\)/)
+  }
+
   async function p(path) {
     const file = await fs.readFile(path)
     const json = JSON.parse(file.toString())
-    const filer = json.filer.match(/\((.*)\)/)
+    const filer = parseFilerName(json.filer)
     const report = path.match(/\/([\w\d\-]+)\.json$/)
     const reportTitle = json.title
     
+    if (path.includes("150EDC44-0E54-48AA-9107-AEA667615811")) {
+      debugger
+    }
+    else {
+      debugger
+    }
+
+
     if (!filer) {
       return
     }
@@ -66,7 +78,7 @@ glob('data/reports/*.json', async function (err, files) {
   console.log("Found 'em, writing to disk")
   queue.onIdle().then(async () => {
     const transactions = d3.csvFormat(allTransactions.flat())
-    await fs.writeFile("transactions.csv", transactions)
+    await fs.writeFile("data/output/transactions.csv", transactions)
     console.log(`All done, created:\n * transactions.csv (${transactions.length} rows)`)
   })
 })

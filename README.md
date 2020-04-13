@@ -25,6 +25,7 @@ Then you can run each step of the workflow as a Node script:
 1. `$ node step-3-parse-html-reports.js`
 1. `$ bash step-4-pull-pdf-data.sh`
 1. `$ node step-5-combine-to-csv.js`
+1. `$ bash step-6-update-data.sh`
 
 ### Step 1 - Get report URLs
 
@@ -61,6 +62,10 @@ I think the best thing would be to make a CSV per major section in each annual r
 * `travel.csv`
 * `liabilities.csv`
 * `positions.csv`
+
+### Step 6 - Update data
+
+Publish generated files [to the data Github repository](https://github.com/jeremiak/us-senate-financial-disclosure-data/)
 
 ### PDF Review
 

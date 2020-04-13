@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node step-1-get-report-urls.js && node step-2-download-reports.js && node step-3-parse-html-reports.js && bash step-4-pull-pdf-data.sh && node step-5-combine-to-csv.js",
+    "start": "node step-1-get-report-urls.js && node step-2-download-reports.js && node step-3-parse-html-reports.js && bash step-4-pull-pdf-data.sh && node step-5-combine-to-csv.js && bash step-6-update-data.sh",
     "pdf-review": "cd pdf-review && node index.js",
     "pdf-review:dev": "cd pdf-review && nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
