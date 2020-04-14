@@ -1,15 +1,35 @@
+$black: #2D2D2A;
+$space-xs: 4px;
+$space-sm: 8px;
+$space-md: 16px;
+$space-lg: 24px;
+
+
 * {
   box-sizing: border-box;
 }
 
 main {
-  font-family: sans-serif;
+  color: $black;
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 300;
   margin: 0 auto;
   width: 95%;
 
   @media screen and (min-width: 600px) {
     width: 80%;
   }
+}
+
+a {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+h1, h2, h3, h4, h5 {
+  color: $black;
+  font-family: 'Oswald', sans-serif;
 }
 
 table {
@@ -23,12 +43,15 @@ table p {
 }
 
 th {
+  font-weight: 500;
+  padding-bottom: $space-sm;
   text-align: left;
 }
 
 tbody td {
-  padding-top: .3rem;
-  padding-bottom: .3rem;
+  font-weight: 300;
+  padding-top: $space-sm;
+  padding-bottom: $space-sm;
 }
 
 th:first-child,
@@ -104,7 +127,7 @@ $annotatorWidth: 300px;
   padding-top: 0;
   overflow-x: scroll;
   width: $annotatorWidth;
-  
+
   button {
     padding: .75rem;
   }
