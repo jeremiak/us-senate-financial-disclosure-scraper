@@ -3,3 +3,4 @@ data/reports/*
 .next
 .env
 .vscode
+log.txt

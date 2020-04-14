@@ -27,6 +27,8 @@ Then you can run each step of the workflow as a Node script:
 1. `$ node step-5-combine-to-csv.js`
 1. `$ bash step-6-update-data.sh`
 
+If you just want to run everything in loop, you can just execute `bash workflow-loop.sh`. It is helpful to run it in the background and pipe the output to a file, like `bash workflow-loop.sh > log.txt &`.
+
 ### Step 1 - Get report URLs
 
 Uses the report search interface to get the URLs for all reports made by current Senators. Generates a JSON file (`data/reports.json`) of each report found in the tool.
