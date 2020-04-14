@@ -1,12 +1,25 @@
 $black: #2D2D2A;
+$bg: #F5F4DE;
+
 $space-xs: 4px;
 $space-sm: 8px;
 $space-md: 16px;
 $space-lg: 24px;
 
+// Use these after
+$type-size-1: 22px;
+$type-size-2: 20px;
+$type-size-3: 16px;
+$type-size-4: 12px;
+$type-size-5: 10px;
+
 
 * {
   box-sizing: border-box;
+}
+
+body {
+  margin: 0;
 }
 
 main {
@@ -21,6 +34,26 @@ main {
   }
 }
 
+header {
+  align-items: center;
+  background: $bg;
+  display: flex;
+  padding: 10px 20px;
+
+  img {
+    height: 36px;
+  }
+
+  h2 {
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+
+  * {
+    margin-right: $space-md;
+  }
+}
+
 a {
   font-family: 'Oswald', sans-serif;
   font-weight: 600;
@@ -30,6 +63,10 @@ a {
 h1, h2, h3, h4, h5 {
   color: $black;
   font-family: 'Oswald', sans-serif;
+}
+
+.h3 {
+  font-size: $type-size-3;
 }
 
 table {

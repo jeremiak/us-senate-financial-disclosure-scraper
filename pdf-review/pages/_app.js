@@ -11,6 +11,10 @@ export default function MyApp({ Component, pageProps }) {
           rel="stylesheet"
         />
       </Head>
+      <header>
+        <img src="https://protoptypes.s3-us-west-1.amazonaws.com/senate_icon.svg" />
+        <h2 class="h3">US Financial Disclosure Data</h2>
+      </header>
       <main>
         <Component {...pageProps} />
       </main>
