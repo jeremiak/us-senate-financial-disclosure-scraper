@@ -1,4 +1,7 @@
 $black: #2D2D2A;
+$common-dark: #565650;
+$primary: #3656A9;
+$secondary: #D9D375;
 $bg: #F5F4DE;
 
 $space-xs: 4px;
@@ -7,11 +10,12 @@ $space-md: 16px;
 $space-lg: 24px;
 
 // Use these after
-$type-size-1: 22px;
+$type-size-1: 24px;
 $type-size-2: 20px;
 $type-size-3: 16px;
 $type-size-4: 12px;
 $type-size-5: 10px;
+$type-size-b: 14px;
 
 
 * {
@@ -54,10 +58,46 @@ header {
   }
 }
 
+/*
+/ Typography
+*/
 a {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 600;
+  color: $primary;
   text-decoration: underline;
+
+  &:visited {
+    color: $common-dark;
+  }
+}
+
+button {
+  background-color: $secondary;
+  border: 2px solid white;
+  border-radius: 0;
+  font-family: 'Oswald', sans-serif;
+  font-size: $type-size-3;
+  font-weight: 600;
+  margin-bottom: .3rem;
+  margin-top: .6rem;
+  text-transform: uppercase;
+  text-align: center;
+  width: 100%;
+
+  &.primary {
+    background-color: $primary;
+    color: white;
+  }
+
+  &.cancel {
+    background-color: #E1E1E1;
+  }
+}
+
+p {
+  font-family: 'Fira Sans', sans-serif;
+  font-size: $type-size-b;
+  line-height: 17px;
+  margin-bottom: 17px;
 }
 
 h1, h2, h3, h4, h5 {
@@ -65,12 +105,33 @@ h1, h2, h3, h4, h5 {
   font-family: 'Oswald', sans-serif;
 }
 
-.h3 {
+h1, .h1 {
+  font-size: $type-size-1;
+}
+
+h2, .h2 {
+  font-size: $type-size-2;
+}
+
+h3, .h3 {
   font-size: $type-size-3;
 }
 
+h4, .h4 {
+  font-size: $type-size-4;
+}
+
+h5, .h5 {
+  font-size: $type-size-4;
+}
+
+
+/*
+/ Tables
+*/
 table {
   border-collapse: collapse;
+  margin-top: $space-lg;
   width: 100%;
 }
 
@@ -98,6 +159,63 @@ td:first-child {
 
 tbody tr:nth-child(odd) {
   background-color: #ebebeb;
+}
+
+/*
+/ Forms
+*/
+
+form {
+  margin: $space-md 0;
+}
+
+legend:first-of-type {
+  font-family: 'Oswald', sans-serif;
+  font-size: $type-size-2;
+  margin-top: $space-sm;
+}
+
+fieldset {
+  background-color: $bg;
+  border: none;
+  margin-top: .3rem;
+  margin-left: -$space-md;
+  margin-right: -$space-md;
+  padding: $space-md;
+}
+
+label {
+  display: block;
+  margin-bottom: $space-xs;
+  margin-top: $space-lg;
+  font-weight: 600;
+}
+
+details {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+textarea {
+  padding: .25rem;
+  width: 100%;
+
+  &.code {
+    font-family: monospace;
+  }
+}
+
+
+select,
+input {
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 1.1rem;
+  padding: .1rem;
+  width: 100%;
+}
+
+form ~ form {
+  margin-top: $space-md * 2;
 }
 
 .report-annotator-container {
@@ -148,7 +266,7 @@ $height: 80vh;
   margin-bottom: 0;
 }
 
-$annotatorWidth: 300px;
+$annotatorWidth: 360px;
 
 .annotator-container {
   min-height: $height;
@@ -168,46 +286,4 @@ $annotatorWidth: 300px;
   button {
     padding: .75rem;
   }
-}
-
-fieldset {
-  padding: 0;
-  padding-left: 1rem;
-  margin-top: .3rem;
-}
-
-label {
-  display: block;
-  margin-top: 1rem;
-}
-
-details {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
-
-textarea {
-  padding: .25rem;
-  width: 100%;
-}
-
-select,
-input {
-  font-size: 1.1rem;
-  padding: .1rem;
-  width: 100%;
-}
-
-button {
-  border: 1px solid black;
-  border-radius: 0;
-  margin-bottom: .3rem;
-  margin-top: .6rem;
-  text-transform: uppercase;
-  text-align: center;
-  width: 100%;
-}
-
-form ~ form {
-  margin-top: 1rem;
 }

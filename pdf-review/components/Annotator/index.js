@@ -127,9 +127,9 @@ const Annotator = ({ initialJson, reportId }) => {
       <PTR onChange={upsertData} isAmended={false} data={state.data} />
       <details>
         <summary>See as JSON</summary>
-        <textarea rows="20" cols="70" disabled={true} value={stateToJson()} />
+        <textarea className="code" rows="20" cols="70" disabled={true} value={stateToJson()} />
       </details>
-      <button className="btn-primary" onClick={save} disabled={isSaving}>
+      <button className="primary" onClick={save} disabled={isSaving}>
         {isSaving ? "Saving... " : "Save"}
       </button>
     </div>
