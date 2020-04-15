@@ -70,15 +70,17 @@ a {
   }
 }
 
-button {
+button, .button {
   background-color: $secondary;
   border: 2px solid white;
   border-radius: 0;
+  display: block;
   font-family: 'Oswald', sans-serif;
   font-size: $type-size-3;
   font-weight: 600;
   margin-bottom: .3rem;
   margin-top: .6rem;
+  text-decoration: none;
   text-transform: uppercase;
   text-align: center;
   width: 100%;
@@ -133,6 +135,15 @@ table {
   border-collapse: collapse;
   margin-top: $space-lg;
   width: 100%;
+
+  button, .button {
+    border: none;
+    margin-bottom: 0;
+    margin-top: 0;
+    margin-right: $space-sm;
+    min-width: 40px;
+    width: auto
+  }
 }
 
 table p {

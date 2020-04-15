@@ -38,11 +38,19 @@ const Table = ({ columns, data }) => {
           return (
             <tr {...row.getRowProps()}>
               {row.cells.map((cell) => {
-                const isLinkColumn = cell.column.Header === "Link"
+                const isActionColumn = cell.column.Header === ""
                 let cellContents
 
-                if (isLinkColumn) {
-                  cellContents = <a href={cell.value}>{cell.value}</a>
+                if (isActionColumn) {
+                  const status = row.cells.find(c => c.column.id === 'json')
+                  const completed = status.value === 'Yes' ? false : true
+                  console.log('herherherherherh')
+                  console.log(status)
+                  cellContents = (
+                    <a class="button primary" href={cell.value}>
+                      {completed ? 'Create' : 'Edit'}
+                    </a>
+                  )
                 } else {
                   cellContents = cell.render('Cell')
                 }

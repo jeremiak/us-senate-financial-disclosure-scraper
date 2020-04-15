@@ -53,13 +53,13 @@ const Page = ({ reports }) => {
       sortType: "basic",
     },
     {
-      Header: "Link",
-      accessor: "link",
+      Header: "Completed",
+      accessor: "json",
       sortType: "basic",
     },
     {
-      Header: "Has JSON",
-      accessor: "json",
+      Header: "",
+      accessor: "link",
       sortType: "basic",
     },
   ]
