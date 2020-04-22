@@ -87,7 +87,7 @@ const PTR = ({ onChange, data }) => {
   return (
     <form>
       <legend>Transaction data</legend>
-      <p>Please enter the data from the table in the report</p>
+      <p>Please read the document and add data for all the transactions.</p>
       {transactions.map((transaction, i) => (
           <fieldset key={transaction._id}>
             {transactionFields.map(field => {
