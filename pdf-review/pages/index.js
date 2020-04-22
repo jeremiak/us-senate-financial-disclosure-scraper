@@ -1,28 +1,32 @@
 import http from "isomorphic-fetch"
 import React, { useMemo } from "react"
 
+import { timeFormat } from "d3-time-format"
+
 import Table from "../components/Table"
+
+const formatDate = timeFormat('%Y-%m-%d')
 
 const Page = ({ reports }) => {
   const state = useMemo(() => reports
     .filter(report => report.metadata)
     .sort(function (a, b) {
-      if (!a.metadata) return -1
-      if (!b.metadata) return -1
-
       const { reportDate: reportDateA } = a.metadata
       const { reportDate: reportDateB } = b.metadata
 
       const aDate = new Date(reportDateA)
       const bDate = new Date(reportDateB)
 
-      return bDate - aDate
+      if (aDate > bDate) return -1
+      if (aDate < bDate) return 1
+      return 0
     })
     .map((report) => {
       const { metadata, reportId, json } = report
+      const date = new Date(metadata.reportDate)
 
       return {
-        date: metadata.reportDate,
+        date: formatDate(date),
         senator: `${metadata.firstName} ${metadata.lastName}`,
         title: metadata.reportTitle,
         link: `/report/${reportId}`,
