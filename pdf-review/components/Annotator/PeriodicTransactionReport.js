@@ -57,7 +57,7 @@ const PTR = ({ onChange, data }) => {
 
     transactionFields.forEach(({ field }) => (newTransaction[field] = ""))
     copy.push(newTransaction)
-    
+
     onChange([
       { heading: "Transactions", amended: false, rows: copy },
     ])
@@ -86,7 +86,8 @@ const PTR = ({ onChange, data }) => {
 
   return (
     <form>
-      <legend>Please enter the data from the table in the report</legend>
+      <legend>Transaction data</legend>
+      <p>Please read the document and add data for all the transactions.</p>
       {transactions.map((transaction, i) => (
           <fieldset key={transaction._id}>
             {transactionFields.map(field => {
@@ -101,11 +102,18 @@ const PTR = ({ onChange, data }) => {
                 </div>
               )
             })}
-            <button onClick={createRemoveTransactionHandler(transaction._id)}>Remove</button>
+            <button
+              className="cancel"
+              onClick={createRemoveTransactionHandler(transaction._id)}>Remove</button>
           </fieldset>
         )
       )}
-      <button onClick={addNewTransaction}>Add a transaction</button>
+      <button
+        class="primary"
+        onClick={addNewTransaction}
+      >
+        Add a transaction
+      </button>
     </form>
   )
 }
