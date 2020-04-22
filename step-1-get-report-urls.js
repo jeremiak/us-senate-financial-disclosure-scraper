@@ -1,5 +1,6 @@
 const fs = require('fs').promises
 
+const orderBy = require('lodash.orderby')
 const puppeteer = require('puppeteer')
 
 async function agreeWithStatement(page) {
@@ -74,8 +75,10 @@ async function getReportUrls () {
 
   }, nextButtonSelector)
 
+  const sorted = orderBy(scrapeData, ['reportLink'])
+
   await browser.close()
-  await fs.writeFile('./data/reports.json', JSON.stringify(scrapeData, null, 2))
+  await fs.writeFile("./data/reports.json", JSON.stringify(sorted, null, 2))
   console.log('All done with step 1, created data/reports.json')
 }
 
