@@ -13,7 +13,7 @@ export default function MyApp({ Component, pageProps }) {
       </Head>
       <header>
         <img src="https://protoptypes.s3-us-west-1.amazonaws.com/senate_icon.svg" />
-        <h2 class="h3">
+        <h2 className="h3">
           <a href="/">US Senate financial disclosure data</a>
         </h2>
         <ul>
