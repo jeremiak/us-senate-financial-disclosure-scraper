@@ -51,22 +51,29 @@ const PTR = ({ onChange, data }) => {
   function addNewTransaction(e) {
     e.preventDefault()
     const newTransaction = {
-      _id: new Date()
+      _id: new Date(),
     }
     const copy = transactions.slice()
+    const lastDate =
+      copy.length === 0 ? false : copy[copy.length - 1]["transaction-date"]
 
-    transactionFields.forEach(({ field }) => (newTransaction[field] = ""))
+    transactionFields.forEach(({ field }) => {
+      if (field === 'transaction-date' && lastDate) {
+        newTransaction[field] = lastDate
+        return
+      }
+
+      newTransaction[field] = ""
+    })
     copy.push(newTransaction)
 
-    onChange([
-      { heading: "Transactions", amended: false, rows: copy },
-    ])
+    onChange([{ heading: "Transactions", amended: false, rows: copy }])
   }
 
   function createUpdateTransactionHandler(transactionId, field) {
-    return function(e) {
+    return function (e) {
       const { value } = e.target
-      const transaction = transactions.find(t => t._id === transactionId)
+      const transaction = transactions.find((t) => t._id === transactionId)
 
       transaction[field] = value
 
@@ -77,10 +84,14 @@ const PTR = ({ onChange, data }) => {
   }
 
   function createRemoveTransactionHandler(transactionId) {
-    return function(e) {
+    return function (e) {
       e.preventDefault()
-      const withoutTransaction = transactions.filter(t => t._id !== transactionId)
-      onChange([{ heading: 'Transactions', amended: false, rows: withoutTransaction }])
+      const withoutTransaction = transactions.filter(
+        (t) => t._id !== transactionId
+      )
+      onChange([
+        { heading: "Transactions", amended: false, rows: withoutTransaction },
+      ])
     }
   }
 
@@ -89,29 +100,31 @@ const PTR = ({ onChange, data }) => {
       <legend>Transaction data</legend>
       <p>Please read the document and add data for all the transactions.</p>
       {transactions.map((transaction, i) => (
-          <fieldset key={transaction._id}>
-            {transactionFields.map(field => {
-              const fieldData = transaction[field.field]
-              return (
-                <div key={field.field}>
-                  <Field
-                    {...field}
-                    onChange={createUpdateTransactionHandler(transaction._id, field.field)}
-                    value={fieldData}
-                  />
-                </div>
-              )
-            })}
-            <button
-              className="cancel"
-              onClick={createRemoveTransactionHandler(transaction._id)}>Remove</button>
-          </fieldset>
-        )
-      )}
-      <button
-        class="primary"
-        onClick={addNewTransaction}
-      >
+        <fieldset key={transaction._id}>
+          {transactionFields.map((field) => {
+            const fieldData = transaction[field.field]
+            return (
+              <div key={field.field}>
+                <Field
+                  {...field}
+                  onChange={createUpdateTransactionHandler(
+                    transaction._id,
+                    field.field
+                  )}
+                  value={fieldData}
+                />
+              </div>
+            )
+          })}
+          <button
+            className="cancel"
+            onClick={createRemoveTransactionHandler(transaction._id)}
+          >
+            Remove
+          </button>
+        </fieldset>
+      ))}
+      <button class="primary" onClick={addNewTransaction}>
         Add a transaction
       </button>
     </form>
