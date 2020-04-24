@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useRef } from "react"
 
 import Field from "./Field"
 
@@ -39,6 +39,8 @@ const transactionFields = [
 ]
 
 const PTR = ({ onChange, data }) => {
+  const addTransactionButtonEl = useRef(null)
+  const newestTransactionDateEl = useRef(null)
   let transactions = []
 
   if (data.length > 0) {
@@ -68,13 +70,19 @@ const PTR = ({ onChange, data }) => {
     copy.push(newTransaction)
 
     onChange([{ heading: "Transactions", amended: false, rows: copy }])
+
+    setTimeout(() => {
+      if (newestTransactionDateEl && newestTransactionDateEl.current) {
+        newestTransactionDateEl.current.focus()
+      }
+    }, 300)
   }
 
   function createUpdateTransactionHandler(transactionId, field) {
     return function (e) {
       const { value } = e.target
       const transaction = transactions.find((t) => t._id === transactionId)
-
+      
       transaction[field] = value
 
       onChange([
@@ -92,6 +100,10 @@ const PTR = ({ onChange, data }) => {
       onChange([
         { heading: "Transactions", amended: false, rows: withoutTransaction },
       ])
+
+      if (addTransactionButtonEl && addTransactionButtonEl.current) {
+        addTransactionButtonEl.current.focus()
+      }
     }
   }
 
@@ -101,12 +113,20 @@ const PTR = ({ onChange, data }) => {
       <p>Please read the document and add data for all the transactions.</p>
       {transactions.map((transaction, i) => (
         <fieldset key={transaction._id}>
-          {transactionFields.map((field) => {
+          {transactionFields.map((field, fieldI) => {
+            const isLastTransaction = i === transactions.length - 1
+            const isFirstField = fieldI === 0
             const fieldData = transaction[field.field]
+
             return (
               <div key={field.field}>
                 <Field
                   {...field}
+                  ref={
+                    isLastTransaction && isFirstField
+                      ? newestTransactionDateEl
+                      : null
+                  }
                   onChange={createUpdateTransactionHandler(
                     transaction._id,
                     field.field
@@ -124,7 +144,11 @@ const PTR = ({ onChange, data }) => {
           </button>
         </fieldset>
       ))}
-      <button class="primary" onClick={addNewTransaction}>
+      <button
+        class="primary"
+        onClick={addNewTransaction}
+        ref={addTransactionButtonEl}
+      >
         Add a transaction
       </button>
     </form>
