@@ -1,41 +1,51 @@
 import http from "isomorphic-fetch"
+import orderBy from "lodash.orderby"
 import React, { useMemo } from "react"
 
 import { timeFormat } from "d3-time-format"
 
 import Table from "../components/Table"
 
-const formatDate = timeFormat('%Y-%m-%d')
+const formatDate = timeFormat("%Y-%m-%d")
 
 const Page = ({ reports }) => {
-  const state = useMemo(() => reports
-    .filter(report => report.metadata)
-    .sort(function (a, b) {
-      const { reportDate: reportDateA } = a.metadata
-      const { reportDate: reportDateB } = b.metadata
+  const state = useMemo(() => {
+    const filtered = reports
+      .filter((report) => report.metadata)
+      .map((report) => {
+        const { metadata, reportId, json } = report
+        const { firstName, lastName, reportDate, reportTitle: title } = metadata
+        const date = new Date(reportDate)
+        let type = "ptr"
 
-      const aDate = new Date(reportDateA)
-      const bDate = new Date(reportDateB)
+        if (title.includes("Report Due Date Extension")) {
+          type = "extension"
+        } else if (title.includes("Annual Report")) {
+          type = "annual"
+        }
+        return {
+          date: formatDate(date),
+          senator: `${firstName} ${lastName}`,
+          title,
+          link: `/report/${reportId}`,
+          json: json ? "Yes" : "No",
+          type,
+        }
+      })
 
-      if (aDate > bDate) return -1
-      if (aDate < bDate) return 1
-      return 0
-    })
-    .map((report) => {
-      const { metadata, reportId, json } = report
-      const date = new Date(metadata.reportDate)
+    const sorted = orderBy(
+      filtered,
+      ["type", "json", "date"],
+      ["desc", "asc", "desc"]
+    )
 
-      return {
-        date: formatDate(date),
-        senator: `${metadata.firstName} ${metadata.lastName}`,
-        title: metadata.reportTitle,
-        link: `/report/${reportId}`,
-        json: json ? "Yes" : "No",
-      }
-    }), [reports.length])
+    return sorted
+  }, [reports.length])
 
   const randomPTRReport = useMemo(() => {
-    const PTRReports = state.filter(report => report.title.includes("Periodic") && report.json === 'No')
+    const PTRReports = state.filter(
+      report => report.type === 'ptr' && report.json === "No"
+    )
     const random = parseInt(Math.random() * PTRReports.length)
     return PTRReports[random]
   }, [state.length])
@@ -71,7 +81,11 @@ const Page = ({ reports }) => {
   return (
     <div>
       <h1>PDF Senate financial disclosure reports</h1>
-      <p>Hey there, grab a report from below to see the data or help us digitize it. If you're just looking for a place to start, <a href={randomPTRReport.link}>click here :)</a>.</p>
+      <p>
+        Hey there, grab a report from below to see the data or help us digitize
+        it. If you're just looking for a place to start,{" "}
+        <a href={randomPTRReport.link}>click here :)</a>.
+      </p>
       <Table columns={columns} data={state} />
     </div>
   )
