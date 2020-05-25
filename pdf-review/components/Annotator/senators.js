@@ -47,6 +47,7 @@ const senators = [
   'Tina Smith (Minnesota)',
   'Roger Wicker (Mississippi)',
   'Cindy Hyde-Smith (Mississippi)',
+  'Thad Cochran (Mississippi)',
   'Roy Blunt (Missouri)',
   'Josh Hawley (Missouri)',
   'John Tester (Montana)',
