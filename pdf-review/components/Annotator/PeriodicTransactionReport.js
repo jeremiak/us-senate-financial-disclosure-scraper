@@ -3,21 +3,27 @@ import React, { useEffect, useRef } from "react"
 import Field from "./Field"
 
 const transactionFields = [
-  { field: "transaction-date", label: "Transaction date", type: "date" },
   {
     field: "owner",
     label: "Owner",
     type: "select",
-    options: ["Self", "Spouse", "Dependent child", "Spouse and dependent child", "Joint"],
+    options: [
+      "Self",
+      "Spouse",
+      "Dependent child",
+      "Spouse and dependent child",
+      "Joint",
+    ],
   },
-  { field: "ticker", label: "Ticker", type: "text" },
   { field: "asset-name", label: "Asset name", type: "text" },
+  { field: "ticker", label: "Ticker", type: "text" },
   {
     field: "transaction-type",
     label: "Transaction type",
     type: "select",
     options: ["Purchase", "Sale", "Exchange"],
   },
+  { field: "transaction-date", label: "Transaction date", type: "date" },
   {
     field: "amount",
     label: "Amount",
