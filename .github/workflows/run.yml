@@ -13,7 +13,7 @@ jobs:
     - uses: actions/setup-node@v2
       with:
         node-version: '14'
-    - uses: mfinelli/setup-imagemagick@v1
+    - uses: mfinelli/setup-imagemagick@v1.1.0
     - name: Install Node dependencies
       run: npm install
     - name: Run scripts
