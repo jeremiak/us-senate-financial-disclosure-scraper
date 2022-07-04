@@ -13,9 +13,7 @@ jobs:
     - uses: actions/setup-node@v2
       with:
         node-version: '14'
-    - uses: jruipinto/ImageMagick-action@v1
-      with:
-        command: mogrify -path /data /data/*.*
+    - uses: mfinelli/setup-imagemagick@v1
     - name: Install Node dependencies
       run: npm install
     - name: Run scripts
