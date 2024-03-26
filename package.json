@@ -18,7 +18,7 @@
     "d3-dsv": "^1.2.0",
     "d3-time-format": "^2.2.3",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1",
+    "express": "^4.19.2",
     "glob": "^7.1.6",
     "images-downloader": "^1.0.3",
     "isomorphic-fetch": "^2.2.1",
